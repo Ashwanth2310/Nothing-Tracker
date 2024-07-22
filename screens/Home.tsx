@@ -5,6 +5,10 @@ import { useSQLiteContext } from 'expo-sqlite';
 import TransactionList from '../components/TransactionsList';
 import Card from '../components/ui/Card';
 import AddTransaction from '../components/AddTransaction';
+import {useFonts} from "expo-font"
+import * as SplashScreen from "expo-splash-screen"
+import { useEffect } from "react";
+
 
 export default function Home() {
     const [categories, setCategories] = React.useState<Category[]>([]);
@@ -22,6 +26,21 @@ export default function Home() {
             await getData();
         })
     },[db])
+
+    const[fontsLoaded,error]  = useFonts({
+        "nothing": require("../assets/fonts/nothingfont.otf")
+      })
+    
+      useEffect(() => {
+        if (fontsLoaded || error) {
+          SplashScreen.hideAsync();
+        }
+      }, [fontsLoaded, error]);
+    
+      if (!fontsLoaded && !error) {
+        return null;
+      }
+    
 
     async function getData() {
         const result = await db.getAllAsync<Transaction>(
@@ -154,12 +173,14 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         marginBottom: 20,
+        fontFamily:"nothing"
     },
     periodTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 24,
+        // fontWeight: 'bold',
         marginBottom: 15,
-        color:"white"
+        color:"white",
+        fontFamily:"nothing"
     },
     summaryItem: {
         flexDirection: 'row',
@@ -167,8 +188,9 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     summaryText: {
-        fontSize: 18,
-        color: '#333',
+        fontSize: 20,
+        color: 'grey',
+        fontFamily:"nothing"
     },
 });
 
