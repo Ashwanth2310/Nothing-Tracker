@@ -4,6 +4,7 @@ import { Category, Transaction } from "../types";
 import { AutoSizeText, ResizeTextMode } from "react-native-auto-size-text";
 import { categoryColors, categoryEmojies } from "../constants";
 import Card from "./ui/Card";
+import {useFonts} from "expo-font";
 
 interface TransactionListItemProps {
   transaction: Transaction;
@@ -56,7 +57,7 @@ function TransactionInfo({
   return (
     <View style={{ flexGrow: 1, gap: 6, flexShrink: 1 }}>
       <Text style={{ fontSize: 20, fontWeight: "bold", color:"white" }}>{description}</Text>
-      <Text style={{ fontSize:10, color:"white" }}>Transaction number {id}</Text>
+      <Text style={{ fontSize:10, color:"white" }}>Transaction number {id}‎ </Text>
       <Text style={{ fontSize: 12, color: "gray" }}>
         {new Date(date).toDateString()}
       </Text>
@@ -77,7 +78,7 @@ function CategoryItem({
     <View
       style={[
         styles.categoryContainer,
-        { backgroundColor: categoryColor + "60" },
+        { backgroundColor: categoryColor + "110" },
       ]}
     >
       <Text style={styles.categoryText}>
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 3,
     alignSelf: "flex-start",
+
   },
   categoryText: {
     fontSize: 12,

@@ -12,3 +12,7 @@ export interface Transaction {
     name: string;
     type: "Expense" | "Income";
   }
+  export interface TransactionsByMonth {
+    totalExpenses: number;
+    totalIncome: number;
+  }
