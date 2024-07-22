@@ -5,6 +5,9 @@ import Card from "./ui/Card";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { useSQLiteContext } from "expo-sqlite/next";
 import { Category, Transaction } from "../types";
+import {useFonts} from "expo-font"
+import * as SplashScreen from "expo-splash-screen"
+import { useEffect } from "react";
 
 export default function AddTransaction({
   insertTransaction,
@@ -21,6 +24,21 @@ export default function AddTransaction({
   const [category, setCategory] = React.useState<string>("Expense");
   const [categoryId, setCategoryId] = React.useState<number>(1);
   const db = useSQLiteContext();
+
+  const[fontsLoaded,error]  = useFonts({
+    "nothing": require("../assets/fonts/nothingfont.otf")
+  })
+
+  useEffect(() => {
+    if (fontsLoaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, error]);
+
+  if (!fontsLoaded && !error) {
+    return null;
+  }
+
 
   React.useEffect(() => {
     getExpenseType(currentTab);
@@ -69,7 +87,7 @@ export default function AddTransaction({
           <Card>
             <TextInput
               placeholder="Amount"
-              style={{ fontSize: 32, marginBottom: 15, fontWeight: "bold", color: "white" }}
+              style={{ fontSize: 32, marginBottom: 15,  color: "white",fontFamily: "nothing" }}
               placeholderTextColor="grey"
               keyboardType="numeric"
               onChangeText={(text) => {
@@ -79,13 +97,13 @@ export default function AddTransaction({
             />
             <TextInput
               placeholder="Description"
-              style={{ marginBottom: 15, color: "white" }}
+              style={{ marginBottom: 15, color: "white",fontFamily: "nothing" }}
               placeholderTextColor="grey"
               onChangeText={setDescription}
             />
-            <Text style={{ marginBottom: 6, color: "grey" }}>Select an entry type</Text>
+            <Text style={{ marginBottom: 6, color: "grey",fontFamily: "nothing" }}>Select an entry type</Text>
             <SegmentedControl
-              values={["Expense", "Income"]}
+              values={["Expense ", "Income "]}
               style={{ marginBottom: 15 }}
               selectedIndex={currentTab}
               onChange={(event) => {
@@ -147,16 +165,17 @@ function CategoryButton({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: isSelected ? "white" : "blue",
+        backgroundColor: isSelected ? "white" : "grey",
         borderRadius: 15,
         marginBottom: 6,
       }}
     >
       <Text
         style={{
-          fontWeight: "700",
-          color: isSelected ? "007BFF" : "#000000",
+        //   fontWeight: "700",
+          color: isSelected ? "007BFF" : "black",
           marginLeft: 5,
+          fontFamily: "nothing"
         }}
       >
         {title}
@@ -184,8 +203,8 @@ function AddButton({
       }}
     >
       <MaterialIcons name="add-circle-outline" size={24} color="#007BFF" />
-      <Text style={{ fontWeight: "700", color: "#007BFF", marginLeft: 5 }}>
-        Add new Entry
+      <Text style={{ fontSize: 18, color: "#007BFF", marginLeft: 5,fontFamily: "nothing"}}>
+        Add new entry
       </Text>
     </TouchableOpacity>
   );
