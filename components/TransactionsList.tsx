@@ -26,7 +26,6 @@ export default function TransactionList({
     );
 
     return (
-        <>
         <SwipeListView
             data={transactions}
             keyExtractor={(item) => item.id.toString()}
@@ -44,9 +43,10 @@ export default function TransactionList({
                 );
             }}
             renderHiddenItem={renderHiddenItem}
-            rightOpenValue={-75}
+            rightOpenValue={-80}  
+            swipeToOpenPercent={30}  
+            swipeToClosePercent={30}  
         />
-        </>
     );
 }
 
@@ -67,14 +67,14 @@ const styles = StyleSheet.create({
         width: 75,
         height: '99%',
         borderRadius: 25,
-        marginBottom: -20, // Adjust this value to move the button down
+        marginBottom: -20, 
     },
     deleteButtonText: {
         color: 'white',
         fontFamily:"nothing"
     },
     transactionItemContainer: {
-        marginVertical: 5, // Added margin for spacing between items
+        marginVertical: 5, 
         paddingHorizontal: 0,
         paddingVertical: 0,
         backgroundColor: 'white',
