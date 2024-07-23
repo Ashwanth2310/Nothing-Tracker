@@ -172,7 +172,7 @@ function CategoryButton({
     >
       <Text
         style={{
-        //   fontWeight: "700",
+        
           color: isSelected ? "007BFF" : "black",
           marginLeft: 5,
           fontFamily: "nothing"

@@ -1,15 +1,16 @@
 import * as React from "react";
 import { StatusBar } from 'expo-status-bar';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import * as FileSystem from "expo-file-system";
 import { Asset } from "expo-asset";
 import { SQLiteProvider } from "expo-sqlite/next";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Home from "./screens/Home";
-import {useFonts} from "expo-font"
-import * as SplashScreen from "expo-splash-screen"
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import Loader from './Loader'; // Import the Loader component
 
 const Stack = createNativeStackNavigator();
 
@@ -37,9 +38,9 @@ export default function App() {
       .catch((e) => console.error(e));
   }, []);
 
-  const[fontsLoaded,error]  = useFonts({
+  const [fontsLoaded, error] = useFonts({
     "nothing": require("./assets/fonts/nothingfont.otf")
-  })
+  });
 
   useEffect(() => {
     if (fontsLoaded || error) {
@@ -47,24 +48,16 @@ export default function App() {
     }
   }, [fontsLoaded, error]);
 
-  if (!fontsLoaded && !error) {
-    return null;
+  if (!fontsLoaded || !dbLoaded) {
+    return <Loader />;
   }
-
-  if (!dbLoaded) return (
-    <View style={{ flex: 1 }}>
-      <ActivityIndicator size={"large"} />
-      <Text>Loading...</Text>
-    </View>
-  );
 
   return (
     <NavigationContainer>
       <React.Suspense
         fallback={
           <View style={{ flex: 1 }}>
-            <ActivityIndicator size={"large"} />
-            <Text>Loading...</Text>
+            <Loader />
           </View>
         }
       >
