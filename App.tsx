@@ -83,7 +83,7 @@ export default function App() {
                   fontFamily: 'nothing', 
                   fontSize: 30,
                 },
-                headerTintColor: 'white', // Set header text color
+                headerTintColor: 'white',
               }}
             />
           </Stack.Navigator>
