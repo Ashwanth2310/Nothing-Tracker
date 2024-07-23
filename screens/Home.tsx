@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
     },
     periodTitle: {
         fontSize: 24,
-        // fontWeight: 'bold',
         marginBottom: 15,
         color:"white",
         fontFamily:"nothing"
