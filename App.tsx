@@ -10,7 +10,7 @@ import Home from "./screens/Home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import Loader from './Loader'; // Import the Loader component
+import Loader from './Loader';
 
 const Stack = createNativeStackNavigator();
 
