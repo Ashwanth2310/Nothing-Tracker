@@ -5,10 +5,10 @@ import Card from "./ui/Card";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { useSQLiteContext } from "expo-sqlite/next";
 import { Category, Transaction } from "../types";
-import {useFonts} from "expo-font"
-import * as SplashScreen from "expo-splash-screen"
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
-import axios from 'axios'
+import axios from 'axios';
 
 export default function AddTransaction({
   insertTransaction,
@@ -26,9 +26,9 @@ export default function AddTransaction({
   const [categoryId, setCategoryId] = React.useState<number>(1);
   const db = useSQLiteContext();
 
-  const[fontsLoaded,error]  = useFonts({
+  const [fontsLoaded, error] = useFonts({
     "nothing": require("../assets/fonts/nothingfont.otf")
-  })
+  });
 
   useEffect(() => {
     if (fontsLoaded || error) {
@@ -39,7 +39,6 @@ export default function AddTransaction({
   if (!fontsLoaded && !error) {
     return null;
   }
-
 
   React.useEffect(() => {
     getExpenseType(currentTab);
@@ -88,7 +87,7 @@ export default function AddTransaction({
           <Card>
             <TextInput
               placeholder="Amount"
-              style={{ fontSize: 32, marginBottom: 15,  color: "white",fontFamily: "nothing" }}
+              style={{ fontSize: 32, marginBottom: 15, color: "white", fontFamily: "nothing" }}
               placeholderTextColor="grey"
               keyboardType="numeric"
               onChangeText={(text) => {
@@ -98,11 +97,11 @@ export default function AddTransaction({
             />
             <TextInput
               placeholder="Description"
-              style={{ marginBottom: 15, color: "white",fontFamily: "nothing" }}
+              style={{ marginBottom: 15, color: "white", fontFamily: "nothing" }}
               placeholderTextColor="grey"
               onChangeText={setDescription}
             />
-            <Text style={{ marginBottom: 6, color: "grey",fontFamily: "nothing" }}>Select an entry type</Text>
+            <Text style={{ marginBottom: 6, color: "grey", fontFamily: "nothing" }}>Select an entry type</Text>
             <SegmentedControl
               values={["Expense ", "Income "]}
               style={{ marginBottom: 15 }}
@@ -126,20 +125,34 @@ export default function AddTransaction({
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-             <TouchableOpacity
-    onPress={() => setIsAddingTransaction(false)}
-    style={{ 
-      backgroundColor: "red", // Customize background color
-      borderRadius: 10, // Customize border radius
-      paddingVertical: 10, // Customize padding
-      paddingHorizontal: 20, // Customize padding
-      justifyContent: "center",
-      alignItems: "center"
-    }}
-  >
-    <Text style={{ fontSize: 16, color: "#fff" }}>Cancel </Text>
-  </TouchableOpacity>
-            <Button title="Save" onPress={handleSave} />
+            <TouchableOpacity
+              onPress={() => setIsAddingTransaction(false)}
+              style={{
+                backgroundColor: "#fc4747",
+                borderRadius: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                width:170
+              }}
+            >
+              <Text style={{ fontSize: 16, color: "#fff" }}>Cancel </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleSave}
+              style={{
+                backgroundColor: "#52aeff",
+                borderRadius: 10,
+                paddingVertical: 10,
+                paddingHorizontal: 20,
+                justifyContent: "center",
+                alignItems: "center",
+                width:170
+              }}
+            >
+              <Text style={{ fontSize: 16, color: "#fff" }}>Save </Text>
+            </TouchableOpacity>
           </View>
         </View>
       ) : (
@@ -181,7 +194,6 @@ function CategoryButton({
     >
       <Text
         style={{
-        
           color: isSelected ? "007BFF" : "black",
           marginLeft: 5,
           fontFamily: "nothing"
@@ -212,7 +224,7 @@ function AddButton({
       }}
     >
       <MaterialIcons name="add-circle-outline" size={24} color="#007BFF" />
-      <Text style={{ fontSize: 18, color: "#007BFF", marginLeft: 5,fontFamily: "nothing"}}>
+      <Text style={{ fontSize: 18, color: "#007BFF", marginLeft: 5, fontFamily: "nothing" }}>
         Add new entry
       </Text>
     </TouchableOpacity>
