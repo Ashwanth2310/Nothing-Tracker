@@ -8,6 +8,7 @@ import { Category, Transaction } from "../types";
 import {useFonts} from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react";
+import axios from 'axios'
 
 export default function AddTransaction({
   insertTransaction,
@@ -125,11 +126,19 @@ export default function AddTransaction({
           <View
             style={{ flexDirection: "row", justifyContent: "space-around" }}
           >
-            <Button
-              title="Cancel"
-              color="red"
-              onPress={() => setIsAddingTransaction(false)}
-            />
+             <TouchableOpacity
+    onPress={() => setIsAddingTransaction(false)}
+    style={{ 
+      backgroundColor: "red", // Customize background color
+      borderRadius: 10, // Customize border radius
+      paddingVertical: 10, // Customize padding
+      paddingHorizontal: 20, // Customize padding
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  >
+    <Text style={{ fontSize: 16, color: "#fff" }}>Cancel </Text>
+  </TouchableOpacity>
             <Button title="Save" onPress={handleSave} />
           </View>
         </View>
