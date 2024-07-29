@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { ScrollView, Text, View, StyleSheet, TextStyle } from 'react-native';
+import { View, Text, StyleSheet, TextStyle, FlatList } from 'react-native';
 import { Category, Transaction, TransactionsByMonth } from '../types';
 import { useSQLiteContext } from 'expo-sqlite';
 import TransactionList from '../components/TransactionsList';
 import Card from '../components/ui/Card';
 import AddTransaction from '../components/AddTransaction';
-import {useFonts} from "expo-font"
+import { useFonts } from "expo-font"
 import * as SplashScreen from "expo-splash-screen"
 import { useEffect } from "react";
-
 
 export default function Home() {
     const [categories, setCategories] = React.useState<Category[]>([]);
@@ -21,26 +20,25 @@ export default function Home() {
 
     const db = useSQLiteContext();
 
-    React.useEffect(()=> {
-        db.withTransactionAsync(async ()=>{
+    React.useEffect(() => {
+        db.withTransactionAsync(async () => {
             await getData();
         })
-    },[db])
+    }, [db])
 
-    const[fontsLoaded,error]  = useFonts({
+    const [fontsLoaded, error] = useFonts({
         "nothing": require("../assets/fonts/nothingfont.otf")
-      })
+    })
     
-      useEffect(() => {
+    useEffect(() => {
         if (fontsLoaded || error) {
-          SplashScreen.hideAsync();
+            SplashScreen.hideAsync();
         }
-      }, [fontsLoaded, error]);
+    }, [fontsLoaded, error]);
     
-      if (!fontsLoaded && !error) {
+    if (!fontsLoaded && !error) {
         return null;
-      }
-    
+    }
 
     async function getData() {
         const result = await db.getAllAsync<Transaction>(
@@ -52,7 +50,6 @@ export default function Home() {
             `SELECT * FROM Categories`
         );
         setCategories(categoriesResult)
-
 
         const now = new Date()
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -68,7 +65,7 @@ export default function Home() {
             COALESCE(SUM(CASE WHEN type = 'Income' THEN amount ELSE 0 END), 0) AS totalIncome
             FROM Transactions
             WHERE date >= ? AND date <= ?;`,
-            [startOfMonthTimestamp,endOfMonthTimestamp]
+            [startOfMonthTimestamp, endOfMonthTimestamp]
         )
         setTransactionsByMonth(transactionsByMonth[0])
     }
@@ -96,27 +93,37 @@ export default function Home() {
           );
           await getData();
         });
-      }
+    }
+
+    const renderHeader = () => (
+        <>
+            <AddTransaction insertTransaction={insertTransaction} />
+            <TransactionSummary totalExpenses={transactionsByMonth.totalExpenses} totalIncome={transactionsByMonth.totalIncome} />
+        </>
+    );
 
     return (
-        <ScrollView
-          contentContainerStyle={styles.container}
-        >
-            <AddTransaction insertTransaction={insertTransaction}/>
-            <TransactionSummary totalExpenses={transactionsByMonth.totalExpenses} totalIncome={transactionsByMonth.totalIncome} />
-          <TransactionList
-            categories={categories}
-            transactions={transactions}
-            deleteTransaction={deleteTransaction}
-          />
-        </ScrollView>
+        <View style={styles.container}>
+            <FlatList
+                ListHeaderComponent={renderHeader}
+                data={transactions}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                    <TransactionList
+                        categories={categories}
+                        transactions={[item]}
+                        deleteTransaction={deleteTransaction}
+                    />
+                )}
+            />
+        </View>
     )
 }
 
 function TransactionSummary({
     totalIncome,
     totalExpenses,
-  }: TransactionsByMonth) {
+}: TransactionsByMonth) {
     const savings = totalIncome - totalExpenses;
     const readablePeriod = new Date().toLocaleDateString("default", {
       month: "long",
@@ -142,17 +149,12 @@ function TransactionSummary({
                 <Text style={[styles.summaryText, getMoneyTextStyle(totalIncome)]}>
                     {formatMoney(totalIncome)}
                 </Text>
-                
             </View>
-            
             <View style={styles.summaryItem}>
-            
                 <Text style={styles.summaryText}>Total Expenses: </Text>
                 <Text style={[styles.summaryText, getMoneyTextStyle(totalExpenses)]}>
                     {formatMoney(totalExpenses)}
-                    
                 </Text>
-                
             </View>
             <View style={styles.summaryItem}>
                 <Text style={styles.summaryText}>Savings: </Text>
@@ -166,20 +168,20 @@ function TransactionSummary({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 25,
+        flex: 1,
         backgroundColor: 'black',
     },
     card: {
         padding: 15,
         borderRadius: 10,
         marginBottom: 20,
-        fontFamily:"nothing"
+        fontFamily: "nothing"
     },
     periodTitle: {
         fontSize: 24,
         marginBottom: 15,
-        color:"white",
-        fontFamily:"nothing"
+        color: "white",
+        fontFamily: "nothing"
     },
     summaryItem: {
         flexDirection: 'row',
@@ -189,7 +191,6 @@ const styles = StyleSheet.create({
     summaryText: {
         fontSize: 20,
         color: 'grey',
-        fontFamily:"nothing"
+        fontFamily: "nothing"
     },
 });
-
